@@ -1,9 +1,9 @@
 <p>
-  <a href="https://github.com/HBAI-Ltd/Toonflow-app">
+  <a href="https://github.com/HBAI-Ltd/AI-Manga-Agent-app">
     <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub" />
   </a>
   &nbsp;|&nbsp;
-  <a href="https://gitee.com/HBAI-Ltd/Toonflow-app">
+  <a href="https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app">
     <img src="https://img.shields.io/badge/Gitee-C71D23?style=flat-square&logo=gitee&logoColor=white" alt="Gitee" />
   </a>
 </p>
@@ -15,9 +15,9 @@
 
 <div align="center">
 
-<img src="./logo.png" alt="Toonflow Logo" height="120"/>
+<img src="./logo.png" alt="AI Manga Agent Logo" height="120"/>
 
-# Toonflow
+# AI Manga Agent
 
   <p align="center">
     <b>
@@ -29,14 +29,14 @@
     </b>
   </p>
   <p align="center">
-    <a href="https://github.com/HBAI-Ltd/Toonflow-app/stargazers">
-      <img src="https://img.shields.io/github/stars/HBAI-Ltd/Toonflow-app?style=for-the-badge&logo=github" alt="Stars Badge" />
+    <a href="https://github.com/HBAI-Ltd/AI-Manga-Agent-app/stargazers">
+      <img src="https://img.shields.io/github/stars/HBAI-Ltd/AI-Manga-Agent-app?style=for-the-badge&logo=github" alt="Stars Badge" />
     </a>
     <a href="https://www.gnu.org/licenses/agpl-3.0" target="_blank">
       <img src="https://img.shields.io/badge/License-AGPL-blue.svg?style=for-the-badge" alt="AGPL License Badge" />
     </a>
-    <a href="https://github.com/HBAI-Ltd/Toonflow-app/releases">
-      <img alt="release" src="https://img.shields.io/github/v/release/HBAI-Ltd/Toonflow-app?style=for-the-badge" />
+    <a href="https://github.com/HBAI-Ltd/AI-Manga-Agent-app/releases">
+      <img alt="release" src="https://img.shields.io/github/v/release/HBAI-Ltd/AI-Manga-Agent-app?style=for-the-badge" />
     </a>
   </p>
   
@@ -47,7 +47,7 @@
 
 # 🌟 Main Features
 
-Toonflow is an AI tool that leverages AI technology to automatically turn novels into scripts, then uses AI to generate images and videos for efficient short drama production. With Toonflow, you can easily accomplish the entire workflow from text to visuals, making short drama creation more intelligent and convenient.
+AI Manga Agent is an AI tool that leverages AI technology to automatically turn novels into scripts, then uses AI to generate images and videos for efficient short drama production. With AI Manga Agent, you can easily accomplish the entire workflow from text to visuals, making short drama creation more intelligent and convenient.
 
 - ✅ **Character Generation**  
    Automatically analyzes the original novel text, intelligently recognizes and generates character profiles, including appearance, personality, identity, etc., providing a reliable foundation for subsequent script and image creation.
@@ -75,9 +75,9 @@ Toonflow is an AI tool that leverages AI technology to automatically turn novels
 ## 📺 Video Tutorial
 
 https://www.bilibili.com/video/BV1na6wB6Ea2
-[![Toonflow 8-minute Quick Start AI Video](./videoCover.png)](https://www.bilibili.com/video/BV1na6wB6Ea2)
+[![AI Manga Agent 8-minute Quick Start AI Video](./videoCover.png)](https://www.bilibili.com/video/BV1na6wB6Ea2)
 
-**Toonflow 8-Minute Quick Start AI Video**
+**AI Manga Agent 8-Minute Quick Start AI Video**
 👉 [Click to watch](https://www.bilibili.com/video/BV1na6wB6Ea2/?share_source=copy_web&vd_source=5b718c25439a901a34c7bc0c1d35b38e)
 
 📱 Watch via WeChat QR scan
@@ -102,7 +102,7 @@ Before installing and using this software, please prepare the following:
 
 | Operating System | GitHub Download                                              | 123YunPan Download                                         | Description                                                 |
 | :--------------: | :---------------------------------------------------------- | :-------------------------------------------------------- | :---------------------------------------------------------- |
-| Windows          | [Release](https://github.com/HBAI-Ltd/Toonflow-app/releases) | [123YunPan](https://www.123865.com/s/bkn5Vv-E67cv)        | Official release installation package                       |
+| Windows          | [Release](https://github.com/HBAI-Ltd/AI-Manga-Agent-app/releases) | [123YunPan](https://www.123865.com/s/bkn5Vv-E67cv)        | Official release installation package                       |
 |  Linux           | ⚙️ Coming soon                                              | ⚙️ Coming soon                                            | To be released soon                                         |
 |  macOS           | ⚙️ Coming soon                                              | ⚙️ Coming soon                                            | To be released soon                                         |
 
@@ -147,8 +147,8 @@ npm install -g yarn pm2
 
 ```bash
 cd /opt
-git clone https://github.com/HBAI-Ltd/Toonflow-app.git
-cd Toonflow-app
+git clone https://github.com/HBAI-Ltd/AI-Manga-Agent-app.git
+cd AI-Manga-Agent-app
 yarn install
 yarn build
 ```
@@ -157,8 +157,8 @@ yarn build
 
 ```bash
 cd /opt
-git clone https://gitee.com/HBAI-Ltd/Toonflow-app.git
-cd Toonflow-app
+git clone https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app.git
+cd AI-Manga-Agent-app
 yarn install
 yarn build
 ```
@@ -169,7 +169,7 @@ Create a `pm2.json` file:
 
 ```json
 {
-  "name": "toonflow-app",
+  "name": "ai-manga-agent-app",
   "script": "build/app.js",
   "instances": "max",
   "exec_mode": "cluster",
@@ -202,18 +202,18 @@ pm2 save
 #### 5. Common Commands
 
 ```bash
-pm2 list              # List processes
-pm2 logs toonflow-app # View logs
-pm2 restart all       # Restart all services
-pm2 monit             # Monitoring panel
+pm2 list                     # List processes
+pm2 logs ai-manga-agent-app  # View logs
+pm2 restart all              # Restart all services
+pm2 monit                    # Monitoring panel
 ```
 
 #### 6. Deploy the Frontend Website
 
 To deploy or customize the frontend separately, refer to the frontend repo:
 
-- **GitHub**: [Toonflow-web](https://github.com/HBAI-Ltd/Toonflow-web)
-- **Gitee**: [Toonflow-web](https://gitee.com/HBAI-Ltd/Toonflow-web)
+- **GitHub**: [AI-Manga-Agent-web](https://github.com/HBAI-Ltd/AI-Manga-Agent-web)
+- **Gitee**: [AI-Manga-Agent-web](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-web)
 
 > 💡 **Note**: This repo includes pre-compiled frontend assets; regular users don’t need to deploy frontend separately. The frontend repo is for developers needing secondary development.
 
@@ -233,15 +233,15 @@ To deploy or customize the frontend separately, refer to the frontend repo:
    **From GitHub:**
 
    ```bash
-   git clone https://github.com/HBAI-Ltd/Toonflow-app.git
-   cd Toonflow-app
+   git clone https://github.com/HBAI-Ltd/AI-Manga-Agent-app.git
+   cd AI-Manga-Agent-app
    ```
 
    **From Gitee (china):**
 
    ```bash
-   git clone https://gitee.com/HBAI-Ltd/Toonflow-app.git
-   cd Toonflow-app
+   git clone https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app.git
+   cd AI-Manga-Agent-app
    ```
 
 2. **Install Dependencies**
@@ -292,8 +292,8 @@ To deploy or customize the frontend separately, refer to the frontend repo:
 
 To modify the frontend, go to the frontend repo:
 
-- **GitHub**: [Toonflow-web](https://github.com/HBAI-Ltd/Toonflow-web)
-- **Gitee**: [Toonflow-web](https://gitee.com/HBAI-Ltd/Toonflow-web)
+- **GitHub**: [AI-Manga-Agent-web](https://github.com/HBAI-Ltd/AI-Manga-Agent-web)
+- **Gitee**: [AI-Manga-Agent-web](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-web)
 
 After building the frontend, copy the contents of the `dist` folder into this project’s `scripts/web` directory for integration.
 
@@ -343,10 +343,10 @@ After building the frontend, copy the contents of the `dist` folder into this pr
 
 | Repository        | Description                           | GitHub                                             | Gitee                                            |
 | ----------------- | ------------------------------------- | -------------------------------------------------- | ------------------------------------------------ |
-| **Toonflow-app**  | Full client (this repo, for users)    | [GitHub](https://github.com/HBAI-Ltd/Toonflow-app) | [Gitee](https://gitee.com/HBAI-Ltd/Toonflow-app) |
-| **Toonflow-web**  | Frontend source (for devs)            | [GitHub](https://github.com/HBAI-Ltd/Toonflow-web) | [Gitee](https://gitee.com/HBAI-Ltd/Toonflow-web) |
+| **AI-Manga-Agent-app**  | Full client (this repo, for users)    | [GitHub](https://github.com/HBAI-Ltd/AI-Manga-Agent-app) | [Gitee](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app) |
+| **AI-Manga-Agent-web**  | Frontend source (for devs)            | [GitHub](https://github.com/HBAI-Ltd/AI-Manga-Agent-web) | [Gitee](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-web) |
 
-> 💡 **Tip**: If you just want to use Toonflow, download the client from this repo. The web repo is only for frontend customization/development.
+> 💡 **Tip**: If you just want to use AI漫剧智能体, download the client from this repo. The web repo is only for frontend customization/development.
 
 ---
 
@@ -385,22 +385,22 @@ We continue to optimize the product. Key focuses for the near future:
 
 Group 6:
 
-<img src="./chat6QR.jpg" alt="Toonflow Logo" height="400"/>
+<img src="./chat6QR.jpg" alt="AI漫剧智能体 Logo" height="400"/>
 <p>Scan with WeChat to join. If the QR expires, open an issue to request an update.</p>
 
 ---
 
 # 💌 Contact Us
 
-📧 Email: [ltlctools@outlook.com](mailto:ltlctools@outlook.com?subject=Toonflow%20Inquiry)
+📧 Email: [ltlctools@outlook.com](mailto:ltlctools@outlook.com?subject=AI%E6%BC%AB%E7%94%BB%E7%94%9F%E6%88%90%E6%99%BA%E8%83%BD%E4%BD%93%20Inquiry)
 
 ---
 
 # 📜 License
 
-Toonflow is open source under the AGPL-3.0 license. Details: https://www.gnu.org/licenses/agpl-3.0.html
+AI漫剧智能体 is open source under the AGPL-3.0 license. Details: https://www.gnu.org/licenses/agpl-3.0.html
 
-You may use Toonflow for any purpose, including commercial, as long as you adhere to the AGPL-3.0 terms and conditions.
+You may use AI漫剧智能体 for any purpose, including commercial, as long as you adhere to the AGPL-3.0 terms and conditions.
 
 For proprietary/commercial licensing exempt from AGPL-3.0, please contact us by email.
 
@@ -408,13 +408,13 @@ For proprietary/commercial licensing exempt from AGPL-3.0, please contact us by 
 
 # ⭐️ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=HBAI-Ltd/Toonflow-app&type=date&legend=top-left)](https://www.star-history.com/#HBAI-Ltd/Toonflow-app&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=HBAI-Ltd/AI-Manga-Agent-app&type=date&legend=top-left)](https://www.star-history.com/#HBAI-Ltd/AI-Manga-Agent-app&type=date&legend=top-left)
 
 ---
 
 # 🙏 Special Thanks
 
-Thanks to the following open-source projects for empowering Toonflow:
+Thanks to the following open-source projects for empowering AI漫剧智能体:
 
 - [Express](https://expressjs.com/) – Fast, open, minimal Node.js web framework
 - [LangChain](https://js.langchain.com/) – Framework for building LLM apps
@@ -425,7 +425,7 @@ Thanks to the following open-source projects for empowering Toonflow:
 - [Aigne](https://github.com/aigne-com/aigne) – Unified LLM API middleware
 - [Electron](https://www.electronjs.org/) – Cross-platform desktop app framework
 
-Thanks to the following organizations/individuals for supporting Toonflow:
+Thanks to the following organizations/individuals for supporting AI漫剧智能体:
 
 <table>
   <tr>

@@ -17,9 +17,9 @@ RUN npm config set registry https://registry.npmmirror.com/ && \
 # 根据参数选择仓库源，支持 TAG / BRANCH 切换
 # 优先级: TAG > BRANCH > 最新 tag > 默认分支
 RUN if [ "$GIT" = "gitee" ]; then \
-        REPO_URL="https://gitee.com/HBAI-Ltd/Toonflow-app.git"; \
+        REPO_URL="https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app.git"; \
     else \
-        REPO_URL="https://github.com/HBAI-Ltd/Toonflow-app.git"; \
+        REPO_URL="https://github.com/HBAI-Ltd/AI-Manga-Agent-app.git"; \
     fi && \
     echo "Cloning from: $REPO_URL" && \
     git clone "$REPO_URL" . && \

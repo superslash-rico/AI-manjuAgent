@@ -1,9 +1,9 @@
 <p>
-  <a href="https://github.com/HBAI-Ltd/Toonflow-app">
+  <a href="https://github.com/HBAI-Ltd/AI-Manga-Agent-app">
     <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white" alt="GitHub" />
   </a>
   &nbsp;|&nbsp;
-  <a href="https://gitee.com/HBAI-Ltd/Toonflow-app">
+  <a href="https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app">
     <img src="https://img.shields.io/badge/Gitee-C71D23?style=flat-square&logo=gitee&logoColor=white" alt="Gitee" />
   </a>
 </p>
@@ -15,9 +15,9 @@
 
 <div align="center">
 
-<img src="./docs/logo.png" alt="Toonflow Logo" height="120"/>
+<img src="./docs/logo.png" alt="AI漫剧智能体 Logo" height="120"/>
 
-# Toonflow
+# AI漫剧智能体
 
   <p align="center">
     <b>
@@ -29,14 +29,14 @@
     </b>
   </p>
   <p align="center">
-    <a href="https://github.com/HBAI-Ltd/Toonflow-app/stargazers">
-      <img src="https://img.shields.io/github/stars/HBAI-Ltd/Toonflow-app?style=for-the-badge&logo=github" alt="Stars Badge" />
+    <a href="https://github.com/HBAI-Ltd/AI-Manga-Agent-app/stargazers">
+      <img src="https://img.shields.io/github/stars/HBAI-Ltd/AI-Manga-Agent-app?style=for-the-badge&logo=github" alt="Stars Badge" />
     </a>
     <a href="https://www.gnu.org/licenses/agpl-3.0" target="_blank">
       <img src="https://img.shields.io/badge/License-AGPL-blue.svg?style=for-the-badge" alt="AGPL License Badge" />
     </a>
-    <a href="https://github.com/HBAI-Ltd/Toonflow-app/releases">
-      <img alt="release" src="https://img.shields.io/github/v/release/HBAI-Ltd/Toonflow-app?style=for-the-badge" />
+    <a href="https://github.com/HBAI-Ltd/AI-Manga-Agent-app/releases">
+      <img alt="release" src="https://img.shields.io/github/v/release/HBAI-Ltd/AI-Manga-Agent-app?style=for-the-badge" />
     </a>
   </p>
   
@@ -47,7 +47,7 @@
 
 # 🌟 主要功能
 
-Toonflow 是一款 AI 工具，能够利用 AI 技术将小说自动转化为剧本，并结合 AI 生成的图片和视频，实现高效的短剧创作。借助 Toonflow，可以轻松完成从文字到影像的全流程，让短剧制作变得更加智能与便捷。
+AI漫剧智能体 是一款 AI 工具，能够利用 AI 技术将小说自动转化为剧本，并结合 AI 生成的图片和视频，实现高效的短剧创作。借助 AI漫剧智能体，可以轻松完成从文字到影像的全流程，让短剧制作变得更加智能与便捷。
 
 - ✅ **角色生成**  
    自动分析原始小说文本，智能识别并生成角色设定，包括外貌、性格、身份等详细信息，为后续剧本与画面创作提供可靠基础。
@@ -75,9 +75,9 @@ Toonflow 是一款 AI 工具，能够利用 AI 技术将小说自动转化为剧
 ## 📺 视频教程
 
 https://www.bilibili.com/video/BV1na6wB6Ea2
-[![Toonflow 8 分钟快速上手 AI 视频](./docs/videoCover.png)](https://www.bilibili.com/video/BV1na6wB6Ea2)
+[![AI漫剧智能体 8 分钟快速上手 AI 视频](./docs/videoCover.png)](https://www.bilibili.com/video/BV1na6wB6Ea2)
 
-**Toonflow 8 分钟快速上手 AI 视频**
+**AI漫剧智能体 8 分钟快速上手 AI 视频**
 👉 [点击观看](https://www.bilibili.com/video/BV1na6wB6Ea2/?share_source=copy_web&vd_source=5b718c25439a901a34c7bc0c1d35b38e)
 
 📱 手机微信扫码观看
@@ -100,9 +100,9 @@ https://www.bilibili.com/video/BV1na6wB6Ea2
 
 ### 1. 下载与安装
 
-| 操作系统 | GitHub 下载                                                  | 123 云盘下载                                      | 说明           |
-| :------: | :----------------------------------------------------------- | :------------------------------------------------ | :------------- |
-| Windows  | [Release](https://github.com/HBAI-Ltd/Toonflow-app/releases) | [123 云盘](https://www.123865.com/s/bkn5Vv-E67cv) | 官方发布安装包 |
+| 操作系统 | GitHub 下载                                                       | 123 云盘下载                                      | 说明           |
+| :------: | :-------------------------------------------------------------- | :------------------------------------------------ | :------------- |
+| Windows  | [Release](https://github.com/HBAI-Ltd/AI-Manga-Agent-app/releases) | [123 云盘](https://www.123865.com/s/bkn5Vv-E67cv) | 官方发布安装包 |
 |  Linux   | ⚙️ 敬请期待                                                  | ⚙️ 敬请期待                                       | 即将发布       |
 |  macOS   | ⚙️ 敬请期待                                                  | ⚙️ 敬请期待                                       | 即将发布       |
 
@@ -164,8 +164,8 @@ GIT=gitee BRANCH=dev docker-compose -f docker/docker-compose.yml up -d --build
 
 ```shell
 # 先克隆项目（如已有则跳过）
-git clone https://github.com/HBAI-Ltd/Toonflow-app.git
-cd Toonflow-app
+git clone https://github.com/HBAI-Ltd/AI-Manga-Agent-app.git
+cd AI-Manga-Agent-app
 
 # 使用本地源码构建
 docker-compose -f docker/docker-compose.local.yml up -d --build
@@ -205,7 +205,7 @@ docker-compose -f docker/docker-compose.yml down
 docker-compose -f docker/docker-compose.yml up -d --build
 
 # 进入容器调试
-docker exec -it toonflow sh
+docker exec -it ai-manga-agent sh
 ```
 
 > ⚠️ **首次登录**  
@@ -239,8 +239,8 @@ npm install -g yarn pm2
 
 ```bash
 cd /opt
-git clone https://github.com/HBAI-Ltd/Toonflow-app.git
-cd Toonflow-app
+git clone https://github.com/HBAI-Ltd/AI-Manga-Agent-app.git
+cd AI-Manga-Agent-app
 yarn install
 yarn build
 ```
@@ -249,8 +249,8 @@ yarn build
 
 ```bash
 cd /opt
-git clone https://gitee.com/HBAI-Ltd/Toonflow-app.git
-cd Toonflow-app
+git clone https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app.git
+cd AI-Manga-Agent-app
 yarn install
 yarn build
 ```
@@ -261,7 +261,7 @@ yarn build
 
 ```json
 {
-  "name": "toonflow-app",
+  "name": "ai-manga-agent-app",
   "script": "build/app.js",
   "instances": "max",
   "exec_mode": "cluster",
@@ -294,10 +294,10 @@ pm2 save
 #### 5. 常用命令
 
 ```bash
-pm2 list              # 查看进程
-pm2 logs toonflow-app # 查看日志
-pm2 restart all       # 重启服务
-pm2 monit             # 监控面板
+pm2 list                     # 查看进程
+pm2 logs ai-manga-agent-app  # 查看日志
+pm2 restart all              # 重启服务
+pm2 monit                    # 监控面板
 ```
 
 > ⚠️ **首次登录**  
@@ -308,8 +308,8 @@ pm2 monit             # 监控面板
 
 如需单独部署或定制前端界面，请参考前端仓库：
 
-- **GitHub**：[Toonflow-web](https://github.com/HBAI-Ltd/Toonflow-web)
-- **Gitee**：[Toonflow-web](https://gitee.com/HBAI-Ltd/Toonflow-web)
+- **GitHub**：[AI-Manga-Agent-web](https://github.com/HBAI-Ltd/AI-Manga-Agent-web)
+- **Gitee**：[AI-Manga-Agent-web](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-web)
 
 > 💡 **说明**：本仓库已内置编译好的前端资源，普通用户无需单独部署前端。前端仓库仅供需要二次开发的开发者使用。
 
@@ -329,15 +329,15 @@ pm2 monit             # 监控面板
    **从 GitHub 克隆：**
 
    ```bash
-   git clone https://github.com/HBAI-Ltd/Toonflow-app.git
-   cd Toonflow-app
+   git clone https://github.com/HBAI-Ltd/AI-Manga-Agent-app.git
+   cd AI-Manga-Agent-app
    ```
 
    **从 Gitee 克隆（国内推荐）：**
 
    ```bash
-   git clone https://gitee.com/HBAI-Ltd/Toonflow-app.git
-   cd Toonflow-app
+   git clone https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app.git
+   cd AI-Manga-Agent-app
    ```
 
 2. **安装依赖**
@@ -421,8 +421,8 @@ pm2 monit             # 监控面板
 
 如需修改前端界面，请前往前端仓库进行开发：
 
-- **GitHub**：[Toonflow-web](https://github.com/HBAI-Ltd/Toonflow-web)
-- **Gitee**：[Toonflow-web](https://gitee.com/HBAI-Ltd/Toonflow-web)
+- **GitHub**：[AI-Manga-Agent-web](https://github.com/HBAI-Ltd/AI-Manga-Agent-web)
+- **Gitee**：[AI-Manga-Agent-web](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-web)
 
 前端构建后，将 `dist` 目录内容复制到本项目的 `scripts/web` 目录即可集成。
 
@@ -471,12 +471,12 @@ pm2 monit             # 监控面板
 
 # 🔗 相关仓库
 
-| 仓库             | 说明                               | GitHub                                             | Gitee                                            |
-| ---------------- | ---------------------------------- | -------------------------------------------------- | ------------------------------------------------ |
-| **Toonflow-app** | 完整客户端（本仓库，推荐普通用户） | [GitHub](https://github.com/HBAI-Ltd/Toonflow-app) | [Gitee](https://gitee.com/HBAI-Ltd/Toonflow-app) |
-| **Toonflow-web** | 前端源代码（适合前端开发者）       | [GitHub](https://github.com/HBAI-Ltd/Toonflow-web) | [Gitee](https://gitee.com/HBAI-Ltd/Toonflow-web) |
+| 仓库                     | 说明                               | GitHub                                                     | Gitee                                                    |
+| ----------------------- | ---------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| **AI-Manga-Agent-app**   | 完整客户端（本仓库，推荐普通用户） | [GitHub](https://github.com/HBAI-Ltd/AI-Manga-Agent-app)   | [Gitee](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-app)   |
+| **AI-Manga-Agent-web**   | 前端源代码（适合前端开发者）       | [GitHub](https://github.com/HBAI-Ltd/AI-Manga-Agent-web)   | [Gitee](https://gitee.com/HBAI-Ltd/AI-Manga-Agent-web)   |
 
-> 💡 **提示**：如果您只是想使用 Toonflow，直接下载本仓库的客户端即可。前端仓库仅供需要二次开发或定制前端界面的开发者使用。
+> 💡 **提示**：如果您只是想使用 AI漫剧智能体，直接下载本仓库的客户端即可。前端仓库仅供需要二次开发或定制前端界面的开发者使用。
 
 ---
 
@@ -527,22 +527,22 @@ pm2 monit             # 监控面板
 
 交流群 12:
 
-<img src="./docs/chat12QR.jpg?r=2" alt="Toonflow Logo" height="400"/>
+<img src="./docs/chat12QR.jpg?r=2" alt="AI漫剧智能体 Logo" height="400"/>
 <p>使用微信扫码添加，二维码过期可提交 Issues 提醒更新</p>
 
 ---
 
 # 💌 联系我们
 
-📧 邮箱：[ltlctools@outlook.com](mailto:ltlctools@outlook.com?subject=Toonflow咨询)
+📧 邮箱：[ltlctools@outlook.com](mailto:ltlctools@outlook.com?subject=AI漫剧智能体咨询)
 
 ---
 
 # 📜 许可证
 
-Toonflow 基于 AGPL-3.0 协议开源发布，许可证详情：https://www.gnu.org/licenses/agpl-3.0.html
+AI漫剧智能体 基于 AGPL-3.0 协议开源发布，许可证详情：https://www.gnu.org/licenses/agpl-3.0.html
 
-您可以在遵循 AGPL-3.0 相关条款与条件的情况下，将 Toonflow 用于包括商业目的在内的各类用途。
+您可以在遵循 AGPL-3.0 相关条款与条件的情况下，将 AI漫剧智能体 用于包括商业目的在内的各类用途。
 
 如需获得免于 AGPL-3.0 限制的专有商业许可，请通过邮箱与我们联系。
 
@@ -550,13 +550,13 @@ Toonflow 基于 AGPL-3.0 协议开源发布，许可证详情：https://www.gnu.
 
 # ⭐️ 星标历史
 
-[![Star History Chart](https://api.star-history.com/svg?repos=HBAI-Ltd/Toonflow-app&type=date&legend=top-left)](https://www.star-history.com/#HBAI-Ltd/Toonflow-app&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=HBAI-Ltd/AI-Manga-Agent-app&type=date&legend=top-left)](https://www.star-history.com/#HBAI-Ltd/AI-Manga-Agent-app&type=date&legend=top-left)
 
 ---
 
 # 🙏 致谢
 
-感谢以下开源项目为 Toonflow 提供强大支持：
+感谢以下开源项目为 AI漫剧智能体 提供强大支持：
 
 - [Express](https://expressjs.com/) - 快速、开放、极简的 Node.js Web 框架
 - [AI](https://ai-sdk.dev/) - 面向 TypeScript 的 AI 工具包
@@ -567,7 +567,7 @@ Toonflow 基于 AGPL-3.0 协议开源发布，许可证详情：https://www.gnu.
 - [Aigne](https://github.com/aigne-com/aigne) - LLM API 统一管理与接入中间件
 - [Electron](https://www.electronjs.org/) - 跨平台桌面应用开发框架
 
-感谢以下组织/单位/个人为 Toonflow 提供支持：
+感谢以下组织/单位/个人为 AI漫剧智能体 提供支持：
 
 <table>
   <tr>

@@ -52,7 +52,7 @@ const buildOptions = async (input: AIInput<any>, config: AIConfig = {}) => {
   };
 
   const output = input.output ? (outputBuilders[owned.responseFormat]?.(input.output) ?? null) : null;
-  const chatModelManufacturer = ["doubao", "other", "openai"];
+  const chatModelManufacturer = ["doubao", "other", "openai", "ricoxueai"];
   const modelFn = chatModelManufacturer.includes(owned.manufacturer) ? (modelInstance as OpenAIProvider).chat(model!) : modelInstance(model!);
   return {
     config: {

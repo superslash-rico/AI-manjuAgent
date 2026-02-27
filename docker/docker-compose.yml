@@ -1,5 +1,5 @@
 services:
-  toonflow:
+  ai-manga-agent:
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -7,8 +7,8 @@ services:
         GIT: ${GIT:-github}
         TAG: ${TAG:-}
         BRANCH: ${BRANCH:-}
-    image: toonflow:${TAG:-latest}
-    container_name: toonflow
+    image: ai-manga-agent:${TAG:-latest}
+    container_name: ai-manga-agent
     restart: unless-stopped
     ports:
       - "80"

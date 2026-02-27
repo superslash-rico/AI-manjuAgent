@@ -20,7 +20,7 @@ const modelInstance = {
   gemini: gemini,
   runninghub: runninghub,
   apimart: apimart,
-  // other: other,
+  other: other,
 } as const;
 
 export default async (input: VideoConfig, config?: AIConfig) => {

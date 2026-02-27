@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import checker from "license-checker";
 
-const excludeNames = ["toonflow-serve"];
+const excludeNames = ["ai-manga-agent-app"];
 // const strictWhiteList = ["MIT", "BSD-2-Clause", "BSD-3-Clause", "BSD", "0BSD"];
 const strictWhiteList: string[] = [];
 
