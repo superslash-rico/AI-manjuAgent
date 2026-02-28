@@ -59,6 +59,7 @@
     "knex": "^3.1.0",
     "lodash": "^4.17.23",
     "morgan": "^1.10.1",
+    "openai": "^6.25.0",
     "qwen-ai-provider": "^0.1.1",
     "serialize-error": "^13.0.1",
     "sharp": "^0.34.5",

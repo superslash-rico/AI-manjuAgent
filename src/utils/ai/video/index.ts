@@ -10,6 +10,7 @@ import wan from "./owned/wan";
 import runninghub from "./owned/runninghub";
 import gemini from "./owned/gemini";
 import apimart from "./owned/apimart";
+import ricoxueai from "./owned/ricoxueai";
 import other from "./owned/other";
 
 const modelInstance = {
@@ -20,6 +21,7 @@ const modelInstance = {
   gemini: gemini,
   runninghub: runninghub,
   apimart: apimart,
+  ricoxueai: ricoxueai,
   other: other,
 } as const;
 
@@ -28,9 +30,11 @@ export default async (input: VideoConfig, config?: AIConfig) => {
   if (!config || !config?.model || !config?.apiKey) throw new Error("请检查模型配置是否正确");
 
   const manufacturerFn = modelInstance[manufacturer as keyof typeof modelInstance];
-  if (!manufacturerFn) if (!manufacturerFn) throw new Error("不支持的视频厂商");
-  const owned = modelList.find((m) => m.model === model);
-  if (!owned) throw new Error("不支持的模型");
+  if (!manufacturerFn) throw new Error("不支持的视频厂商");
+  if (manufacturer !== "ricoxueai") {
+    const owned = modelList.find((m) => m.model === model);
+    if (!owned) throw new Error("不支持的模型");
+  }
 
   // 补充图片的 base64 内容类型字符串
   if (input.imageBase64 && input.imageBase64.length > 0) {
