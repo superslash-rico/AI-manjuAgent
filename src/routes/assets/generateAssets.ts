@@ -2,7 +2,7 @@ import express from "express";
 import u from "@/utils";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { success } from "@/lib/responseFormat";
+import { success, error } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 import sharp from "sharp";
 const router = express.Router();
@@ -125,16 +125,28 @@ export default router.post(
     });
     const apiConfig = await u.getPromptAi("assetsImage");
 
-    const contentStr = await u.ai.image(
-      {
-        systemPrompt,
-        prompt: userPrompt,
-        imageBase64: base64 ? [base64] : [],
-        size: "2K",
-        aspectRatio: "16:9",
-      },
-      apiConfig,
-    );
+    let contentStr: string;
+    try {
+      contentStr = await u.ai.image(
+        {
+          systemPrompt,
+          prompt: userPrompt,
+          imageBase64: base64 ? [base64] : [],
+          size: "2K",
+          aspectRatio: "16:9",
+        },
+        apiConfig,
+      );
+    } catch (e: any) {
+      // 提取 AI SDK 嵌套错误中的有效信息
+      const errMsg =
+        e?.lastError?.data?.error?.message ||
+        e?.data?.error?.message ||
+        e?.message ||
+        "图片生成失败";
+      await u.db("t_image").where("id", imageId).update({ state: "生成失败" });
+      return res.status(500).send(error(errMsg));
+    }
 
     let insertType;
     const match = contentStr.match(/base64,([A-Za-z0-9+/=]+)/);

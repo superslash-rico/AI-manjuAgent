@@ -1,6 +1,6 @@
 import "./type";
 import u from "@/utils";
-import modelList from "./modelList";
+import modelList, { getRicoxueaiModels } from "./modelList";
 import axios from "axios";
 
 import volcengine from "./owned/volcengine";
@@ -10,6 +10,7 @@ import runninghub from "./owned/runninghub";
 import apimart from "./owned/apimart";
 import other from "./owned/other";
 import gemini from "./owned/gemini";
+import ricoxueai from "./owned/ricoxueai";
 
 const urlToBase64 = async (url: string): Promise<string> => {
   const res = await axios.get(url, { responseType: "arraybuffer" });
@@ -24,6 +25,7 @@ const modelInstance = {
   kling: kling,
   vidu: vidu,
   runninghub: runninghub,
+  ricoxueai: ricoxueai,
   // apimart: apimart,
   other,
 } as const;
@@ -36,8 +38,13 @@ export default async (input: ImageConfig, config: AIConfig) => {
   const manufacturerFn = modelInstance[manufacturer as keyof typeof modelInstance];
   if (!manufacturerFn) if (!manufacturerFn) throw new Error("不支持的图片厂商");
   if (manufacturer !== "other") {
-    const owned = modelList.find((m) => m.model === model);
-    if (!owned) throw new Error("不支持的模型");
+    if (manufacturer === "ricoxueai") {
+      const ricoxueaiModels = getRicoxueaiModels();
+      if (!ricoxueaiModels.includes(model!)) throw new Error("不支持的模型");
+    } else {
+      const owned = modelList.find((m) => m.model === model);
+      if (!owned) throw new Error("不支持的模型");
+    }
   }
 
   // 补充图片的 base64 内容类型字符串

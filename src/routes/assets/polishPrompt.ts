@@ -3,6 +3,7 @@ import u from "@/utils";
 import * as zod from "zod";
 import { error, success } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
+import { get, castArray, compact } from "lodash";
 const router = express.Router();
 interface OutlineItem {
   description: string;
@@ -42,6 +43,7 @@ function mergeNovelText(novelData: NovelChapter[]): string {
     })
     .join("\n");
 }
+
 //润色提示词
 export default router.post(
   "/",
@@ -99,8 +101,10 @@ export default router.post(
     let userPrompt = "";
     if (type == "role") {
       const data = findItemByName(result, name, "characters");
-      const chapterRange = Array.isArray(data?.chapterRange) ? data.chapterRange : [data?.chapterRange];
-      const novelData = (await u.db("t_novel").whereIn("chapterIndex", chapterRange).select("*")) as NovelChapter[];
+      const chapterRange = compact(castArray(get(data, "chapterRange", [])));
+      const novelData = chapterRange.length
+        ? ((await u.db("t_novel").whereIn("chapterIndex", chapterRange).select("*")) as NovelChapter[])
+        : [];
       const results: string = mergeNovelText(novelData);
       systemPrompt = role;
       userPrompt = `
@@ -122,9 +126,10 @@ export default router.post(
     }
     if (type == "scene") {
       const data = findItemByName(result, name, "scenes");
-
-      const chapterRange = Array.isArray(data?.chapterRange) ? data.chapterRange : [data?.chapterRange];
-      const novelData = (await u.db("t_novel").whereIn("chapterIndex", chapterRange).select("*")) as NovelChapter[];
+      const chapterRange = compact(castArray(get(data, "chapterRange", [])));
+      const novelData = chapterRange.length
+        ? ((await u.db("t_novel").whereIn("chapterIndex", chapterRange).select("*")) as NovelChapter[])
+        : [];
       const results: string = mergeNovelText(novelData);
       systemPrompt = scene;
       userPrompt = `
@@ -146,8 +151,10 @@ export default router.post(
     }
     if (type == "props") {
       const data = findItemByName(result, name, "props");
-      const chapterRange = Array.isArray(data?.chapterRange) ? data.chapterRange : [data?.chapterRange];
-      const novelData = (await u.db("t_novel").whereIn("chapterIndex", chapterRange).select("*")) as NovelChapter[];
+      const chapterRange = compact(castArray(get(data, "chapterRange", [])));
+      const novelData = chapterRange.length
+        ? ((await u.db("t_novel").whereIn("chapterIndex", chapterRange).select("*")) as NovelChapter[])
+        : [];
       const results: string = mergeNovelText(novelData);
       systemPrompt = tool;
       userPrompt = `

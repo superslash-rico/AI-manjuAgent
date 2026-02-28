@@ -1,3 +1,5 @@
+import ricoxueaiModelList from "./modelList.json";
+
 interface Owned {
   manufacturer: string;
   model: string;
@@ -40,7 +42,7 @@ const modelList: Owned[] = [
     type: "ti2i",
   },
   //Vidu
-   {
+  {
     manufacturer: "vidu",
     model: "viduq1",
     grid: false,
@@ -68,4 +70,7 @@ const modelList: Owned[] = [
   },
 ];
 
+export function getRicoxueaiModels(): string[] {
+  return (ricoxueaiModelList.data || []).map((item: any) => item.model_name);
+}
 export default modelList;
