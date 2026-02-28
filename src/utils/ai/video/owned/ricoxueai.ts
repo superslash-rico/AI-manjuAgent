@@ -74,11 +74,26 @@ async function tryUniversalVideoCreate(input: VideoConfig, apiKey: string, baseU
   const taskId = submitData.id;
   if (!taskId) throw new Error("任务提交失败: 未返回任务ID");
 
+  let networkFailCount = 0;
+  const maxNetworkFails = 5;
+
   return await pollTask(async () => {
-    const queryRes = await fetch(`${baseURL}/video/query?id=${encodeURIComponent(taskId)}`, {
-      headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
-    });
-    const data: any = await queryRes.json();
+    let data: any;
+    try {
+      const queryRes = await fetch(`${baseURL}/video/query?id=${encodeURIComponent(taskId)}`, {
+        headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
+      });
+      data = await queryRes.json();
+      networkFailCount = 0;
+    } catch (err: any) {
+      networkFailCount++;
+      console.warn(`[ricoxueai-video] 轮询网络异常(${networkFailCount}/${maxNetworkFails}):`, err?.message);
+      if (networkFailCount >= maxNetworkFails) {
+        return { completed: false, error: `轮询连续${maxNetworkFails}次网络异常: ${err?.message}` };
+      }
+      return { completed: false };
+    }
+
     console.log("[ricoxueai-video] 通用接口轮询:", JSON.stringify({ status: data.status, video_url: data.video_url }));
 
     if (data.status === "completed" || data.status === "success") {
