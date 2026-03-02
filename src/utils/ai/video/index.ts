@@ -1,6 +1,7 @@
 import "./type";
 import u from "@/utils";
 import modelList from "./modelList";
+import ricoxueaiList from "@/utils/ai/image/modelList.json";
 import axios from "axios";
 
 import volcengine from "./owned/volcengine";
@@ -34,6 +35,10 @@ export default async (input: VideoConfig, config?: AIConfig) => {
   if (manufacturer !== "ricoxueai") {
     const owned = modelList.find((m) => m.model === model);
     if (!owned) throw new Error("不支持的模型");
+  } else {
+    // 校验ricoxueai厂商的Model是否valid
+    const ricoxueaiOwned = ricoxueaiList.data.find((m: any) => m.model_name === model);
+    if (!ricoxueaiOwned) throw new Error("不支持的模型");
   }
 
   // 补充图片的 base64 内容类型字符串

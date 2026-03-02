@@ -1,8 +1,10 @@
-// @db-hash cd50f6653ebdfddf1a0056eae490d428
+// @db-hash d92d35781c6176cf42d0f0f793dff371
 //该文件由脚本自动生成，请勿手动修改
 
 export interface t_aiModelMap {
   'configId'?: number | null;
+  'defaultManufacturer'?: string | null;
+  'defaultModel'?: string | null;
   'id'?: number;
   'key'?: string | null;
   'name'?: string | null;
@@ -39,6 +41,7 @@ export interface t_config {
   'manufacturer'?: string | null;
   'model'?: string | null;
   'modelType'?: string | null;
+  'source'?: string | null;
   'type'?: string | null;
   'userId'?: number | null;
 }

@@ -5,7 +5,7 @@ import { success } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
-// 获取厂商
+// 获取厂商 /video/getManufacturer
 export default router.post(
   "/",
   validateFields({

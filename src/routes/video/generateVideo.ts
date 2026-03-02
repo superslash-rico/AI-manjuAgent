@@ -6,12 +6,10 @@ import { error, success } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 import { t_config } from "@/types/database";
 import sharp from "sharp";
-import fs from "fs";
-import path from "path";
 
 const router = express.Router();
 
-// 生成视频
+// 生成视频 POST /video/generate
 export default router.post(
   "/",
   validateFields({
@@ -49,13 +47,24 @@ export default router.post(
       }
     }
 
-    // 优先使用视频配置中的AI配置ID查询,查不到再使用传入的aiConfigId
+    // 优先级：videoConfig.aiConfigId > 请求参数 aiConfigId > 默认视频模型配置
     let aiConfigData = null;
     if (configData.aiConfigId) {
       aiConfigData = await u.db("t_config").where("id", configData.aiConfigId).first();
     }
     if (!aiConfigData) {
       aiConfigData = await u.db("t_config").where("id", aiConfigId).first();
+    }
+    if (!aiConfigData) {
+      const defaultConfig = await u.getPromptAi("videoModel");
+      if ("apiKey" in defaultConfig && defaultConfig.apiKey) {
+        aiConfigData = {
+          model: defaultConfig.model,
+          apiKey: defaultConfig.apiKey,
+          baseUrl: defaultConfig.baseURL,
+          manufacturer: defaultConfig.manufacturer,
+        };
+      }
     }
 
     if (!aiConfigData) {

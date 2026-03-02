@@ -6,7 +6,10 @@ interface TableSchema {
   initData?: (knex: Knex) => Promise<void>;
 }
 
-export default async (knex: Knex, forceInit: boolean = false): Promise<void> => {
+export default async (
+  knex: Knex,
+  forceInit: boolean = false,
+): Promise<void> => {
   const tables: TableSchema[] = [
     {
       name: "t_user",
@@ -18,7 +21,9 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
         table.unique(["id"]);
       },
       initData: async (knex) => {
-        await knex("t_user").insert([{ id: 1, name: "admin", password: "admin123" }]);
+        await knex("t_user").insert([
+          { id: 1, name: "admin", password: "admin123" },
+        ]);
       },
     },
     {
@@ -202,10 +207,63 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
         table.integer("createTime");
         table.integer("index");
         table.integer("userId");
+        table.text("source");
         table.primary(["id"]);
         table.unique(["id"]);
       },
-      initData: async (knex) => {},
+      initData: async (knex) => {
+        await knex("t_config").insert([
+          {
+            id: 1,
+            type: "text",
+            model: "doubao-seed-1-8-251228",
+            modelType: "文本",
+            apiKey: "",
+            baseUrl: "https://api.ricoxueai.cn/v1",
+            manufacturer: "ricoxueai",
+            source: "default",
+            createTime: Date.now(),
+            userId: 1,
+          },
+          {
+            id: 2,
+            type: "image",
+            model: "doubao-seedream-5-0-260128",
+            modelType: "图像",
+            apiKey: "",
+            baseUrl: "https://api.ricoxueai.cn/v1",
+            manufacturer: "ricoxueai",
+            source: "default",
+            createTime: Date.now(),
+            userId: 1,
+          },
+          {
+            id: 3,
+            type: "image",
+            model: "doubao-seededit-3-0-i2i-250628",
+            modelType: "图像",
+            apiKey: "",
+            baseUrl: "https://api.ricoxueai.cn/v1",
+            manufacturer: "ricoxueai",
+            source: "default",
+            createTime: Date.now(),
+            userId: 1,
+          },
+          {
+            id: 4,
+            type: "video",
+            model: "doubao-seedance-1-5-pro-251215",
+            modelType: "音视频",
+            apiKey: "",
+            baseUrl: "https://api.ricoxueai.cn/v1",
+            manufacturer: "ricoxueai",
+            source: "default",
+            createTime: Date.now(),
+            userId: 1,
+          },
+        ]);
+        // 如果有新的定制需求，那么就在这里添加新的模型，并制定其独特的key
+      },
     },
     {
       name: "t_videoConfig",
@@ -539,18 +597,25 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
         table.integer("configId");
         table.text("name");
         table.text("key");
+        table.text("defaultManufacturer");
+        table.text("defaultModel");
         table.primary(["id"]);
       },
       initData: async (knex) => {
         await knex("t_aiModelMap").insert([
-          { id: 1, configId: 3, name: "分镜Agent", key: "storyboardAgent" },
-          { id: 2, configId: 2, name: "大纲故事线Agent", key: "outlineScriptAgent" },
-          { id: 3, configId: 4, name: "资产提示词润色", key: "assetsPrompt" },
-          { id: 4, configId: 5, name: "资产图片生成", key: "assetsImage" },
-          { id: 5, configId: 3, name: "剧本生成", key: "generateScript" },
-          { id: 6, configId: 2, name: "视频提示词生成", key: "videoPrompt" },
-          { id: 7, configId: 5, name: "分镜图片生成", key: "storyboardImage" },
-          { id: 8, configId: 5, name: "图片编辑", key: "editImage" },
+          { id: 1, configId: 1, name: "分镜Agent", key: "storyboardAgent" },
+          {
+            id: 2,
+            configId: 1,
+            name: "大纲故事线Agent",
+            key: "outlineScriptAgent",
+          },
+          { id: 3, configId: 1, name: "资产提示词润色", key: "assetsPrompt" },
+          { id: 4, configId: 2, name: "资产图片生成", key: "assetsImage" },
+          { id: 5, configId: 1, name: "剧本生成", key: "generateScript" },
+          { id: 6, configId: 1, name: "视频提示词生成", key: "videoPrompt" },
+          { id: 7, configId: 2, name: "分镜图片生成", key: "storyboardImage" },
+          { id: 8, configId: 3, name: "图片编辑", key: "editImage" },
         ]);
       },
     },

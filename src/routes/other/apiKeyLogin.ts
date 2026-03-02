@@ -17,8 +17,8 @@ async function validateApiKeyWithSuperSlash(apiKey: string): Promise<{ valid: bo
     return { valid: false, message: "APIKey格式错误，必须以'sk-'开头" };
   }
 
-  const baseURL = process.env.RICOXUEAI_API_URL || "https://api.ricoxueai.cn/v1";
-  const timeout = parseInt(process.env.RICOXUEAI_API_TIMEOUT || "8000");
+  const baseURL = "https://api.ricoxueai.cn/v1";
+  const timeout = parseInt("8000");
   const url = `${baseURL}/models`;
 
   console.log("[apiKeyLogin] 开始鉴权, key:", keyPrefix, "url:", url);

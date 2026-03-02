@@ -2,9 +2,111 @@ import "../type";
 import fs from "fs";
 import path from "path";
 import OpenAI from "openai";
+import u from "@/utils";
 import { pollTask } from "@/utils/ai/utils";
 
-// 策略一：OpenAI SDK（Sora 系列）
+const LOG = "[ricoxueai-video]";
+
+// 查询 t_config 判断是否为内置默认视频模型
+const checkDoubaoVideoModel = async (model: string): Promise<{ isDefault: boolean; isVideo: boolean }> => {
+  const row = await u.db("t_config")
+    .where("model", model)
+    .where("manufacturer", "ricoxueai")
+    .where("source", "default")
+    .select("type")
+    .first();
+  if (!row) return { isDefault: false, isVideo: false };
+  return { isDefault: true, isVideo: row.type === "video" };
+};
+
+// 策略一：豆包 Volc API（doubao-seedance 等豆包系列模型专用）
+async function tryDoubaoVolcVideo(input: VideoConfig, apiKey: string, baseURL: string, model: string): Promise<string> {
+  const baseOrigin = baseURL.replace(/\/v1\/?$/, "");
+  const volcEndpoint = `${baseOrigin}/volc/v1/contents/generations/tasks`;
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${apiKey}`,
+  };
+
+  const promptText = `${input.prompt} --ratio ${input.aspectRatio}`;
+  const content: Record<string, any>[] = [{ type: "text", text: promptText }];
+  input.imageBase64?.forEach((img) => {
+    content.push({ type: "image_url", image_url: { url: img } });
+  });
+
+  const body = { model, content };
+
+  console.log(`${LOG} 豆包Volc提交任务 | endpoint=${volcEndpoint}, model=${model}, duration=${input.duration}`);
+
+  const submitRes = await fetch(volcEndpoint, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+  });
+  const submitData: any = await submitRes.json();
+  console.log(`${LOG} 豆包Volc提交结果:`, JSON.stringify(submitData));
+
+  if (!submitRes.ok || !submitData.id) {
+    throw new Error(`豆包任务提交失败: ${submitData?.error?.message || JSON.stringify(submitData)}`);
+  }
+
+  const taskId = submitData.id;
+  console.log(`${LOG} 豆包Volc任务已提交 | taskId=${taskId}`);
+
+  let networkFailCount = 0;
+  const maxNetworkFails = 5;
+  let lastStatus = "";
+
+  return await pollTask(async () => {
+    let data: any;
+    try {
+      const queryRes = await fetch(`${volcEndpoint}/${taskId}`, {
+        headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
+      });
+      data = await queryRes.json();
+      networkFailCount = 0;
+    } catch (err: any) {
+      networkFailCount++;
+      console.warn(`${LOG} 豆包轮询网络异常(${networkFailCount}/${maxNetworkFails}):`, err?.message);
+      if (networkFailCount >= maxNetworkFails) {
+        return { completed: false, error: `轮询连续${maxNetworkFails}次网络异常: ${err?.message}` };
+      }
+      return { completed: false };
+    }
+
+    const { status } = data;
+
+    // 状态变化时打印详细日志，避免重复刷屏
+    if (status !== lastStatus) {
+      lastStatus = status;
+      if (status === "submitted") {
+        console.log(`${LOG} 豆包轮询 | taskId=${taskId}, status=submitted (已提交，等待调度)`);
+      } else if (status === "running") {
+        console.log(`${LOG} 豆包轮询 | taskId=${taskId}, status=running, model=${data.model}, createdAt=${data.created_at}`);
+      } else if (status === "succeeded") {
+        console.log(`${LOG} 豆包轮询 | taskId=${taskId}, status=succeeded, duration=${data.duration}s, resolution=${data.resolution}, fps=${data.framespersecond}, tokens=${data.usage?.total_tokens}`);
+      } else {
+        console.log(`${LOG} 豆包轮询 | taskId=${taskId}, status=${status}, raw=${JSON.stringify(data)}`);
+      }
+    }
+
+    if (status === "succeeded") {
+      const videoUrl = data.content?.video_url;
+      if (!videoUrl) return { completed: false, error: "任务成功但content中无video_url" };
+      console.log(`${LOG} 豆包视频生成完成 | taskId=${taskId}, videoUrl=${videoUrl.substring(0, 120)}...`);
+      return { completed: true, url: videoUrl };
+    }
+    if (status === "submitted" || status === "running") {
+      return { completed: false };
+    }
+    // failed / cancelled / expired 或其他未知状态
+    console.error(`${LOG} 豆包任务异常终止 | taskId=${taskId}, status=${status}, raw=${JSON.stringify(data)}`);
+    return { completed: false, error: `任务${status}` };
+  });
+}
+
+// 策略二：OpenAI SDK（Sora 系列）
 async function tryOpenAIVideos(input: VideoConfig, apiKey: string, baseURL: string, model: string): Promise<string> {
   const openai = new OpenAI({ apiKey, baseURL });
 
@@ -20,18 +122,18 @@ async function tryOpenAIVideos(input: VideoConfig, apiKey: string, baseURL: stri
     seconds: String(input.duration) as OpenAI.Videos.VideoSeconds,
   });
 
-  console.log("[ricoxueai-video] OpenAI 提交成功, id:", video.id);
+  console.log(`${LOG} OpenAI提交成功 | id=${video.id}`);
 
   return await pollTask(async () => {
     const status = await openai.videos.retrieve(video.id);
-    console.log("[ricoxueai-video] OpenAI 轮询:", status.status, "progress:", status.progress);
+    console.log(`${LOG} OpenAI轮询 | status=${status.status}, progress=${status.progress}`);
 
     if (status.status === "completed") {
       const res = await openai.videos.downloadContent(video.id);
       const buffer = Buffer.from(await res.arrayBuffer());
       const savePath = input.savePath.endsWith(".mp4") ? input.savePath : path.join(input.savePath, `ricoxueai_${Date.now()}.mp4`);
       fs.writeFileSync(savePath, buffer);
-      console.log("[ricoxueai-video] 视频下载完成, 大小:", buffer.length);
+      console.log(`${LOG} 视频下载完成 | 大小=${buffer.length}`);
       return { completed: true, url: savePath };
     }
     if (status.status === "failed") {
@@ -41,7 +143,7 @@ async function tryOpenAIVideos(input: VideoConfig, apiKey: string, baseURL: stri
   });
 }
 
-// 策略二：通用视频接口 /v1/video/create（保底）
+// 策略三：通用视频接口 /v1/video/create（保底）
 async function tryUniversalVideoCreate(input: VideoConfig, apiKey: string, baseURL: string, model: string): Promise<string> {
   const headers = {
     "Content-Type": "application/json",
@@ -65,7 +167,7 @@ async function tryUniversalVideoCreate(input: VideoConfig, apiKey: string, baseU
   });
 
   const submitData: any = await submitRes.json();
-  console.log("[ricoxueai-video] 通用接口返回:", JSON.stringify(submitData));
+  console.log(`${LOG} 通用接口返回:`, JSON.stringify(submitData));
 
   if (!submitRes.ok) {
     throw new Error(`任务提交失败: ${submitData?.error?.message || submitData?.message || JSON.stringify(submitData)}`);
@@ -87,14 +189,14 @@ async function tryUniversalVideoCreate(input: VideoConfig, apiKey: string, baseU
       networkFailCount = 0;
     } catch (err: any) {
       networkFailCount++;
-      console.warn(`[ricoxueai-video] 轮询网络异常(${networkFailCount}/${maxNetworkFails}):`, err?.message);
+      console.warn(`${LOG} 轮询网络异常(${networkFailCount}/${maxNetworkFails}):`, err?.message);
       if (networkFailCount >= maxNetworkFails) {
         return { completed: false, error: `轮询连续${maxNetworkFails}次网络异常: ${err?.message}` };
       }
       return { completed: false };
     }
 
-    console.log("[ricoxueai-video] 通用接口轮询:", JSON.stringify({ status: data.status, video_url: data.video_url }));
+    console.log(`${LOG} 通用接口轮询:`, JSON.stringify({ status: data.status, video_url: data.video_url }));
 
     if (data.status === "completed" || data.status === "success") {
       const url = data.video_url || data.url;
@@ -114,7 +216,7 @@ export default async (input: VideoConfig, config: AIConfig): Promise<string> => 
   const apiKey = config.apiKey.replace("Bearer ", "");
   const baseURL = config.baseURL || "https://api.ricoxueai.cn/v1";
 
-  console.log("[ricoxueai-video] 提交任务:", JSON.stringify({
+  console.log(`${LOG} 提交任务:`, JSON.stringify({
     model: config.model,
     baseURL,
     duration: input.duration,
@@ -123,11 +225,22 @@ export default async (input: VideoConfig, config: AIConfig): Promise<string> => 
     hasImage: !!input.imageBase64?.length,
   }));
 
-  // 先尝试 OpenAI SDK，失败后使用通用接口保底
+  // 检查是否为内置默认模型
+  const { isDefault, isVideo } = await checkDoubaoVideoModel(config.model!);
+  if (isDefault) {
+    if (!isVideo) {
+      console.error(`${LOG} 模型 ${config.model} 是内置默认模型但type不是video, 无法生成视频`);
+      throw new Error(`模型 ${config.model} 不是视频类型模型，无法用于视频生成`);
+    }
+    console.log(`${LOG} 检测到内置默认视频模型, 使用豆包Volc专用接口 | model=${config.model}`);
+    return await tryDoubaoVolcVideo(input, apiKey, baseURL, config.model!);
+  }
+
+  // 非内置默认模型：先尝试 OpenAI SDK，失败后使用通用接口保底
   try {
     return await tryOpenAIVideos(input, apiKey, baseURL, config.model!);
   } catch (err: any) {
-    console.warn("[ricoxueai-video] OpenAI 接口失败, 切换通用接口. 原因:", err?.status || err?.code, err?.message);
+    console.warn(`${LOG} OpenAI接口失败, 切换通用接口. 原因:`, err?.status || err?.code, err?.message);
   }
 
   return await tryUniversalVideoCreate(input, apiKey, baseURL, config.model!);

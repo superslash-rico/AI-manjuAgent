@@ -20,7 +20,7 @@ export default {
   ai: {
     text: AIText,
     image: AIImage,
-    video: AIVideo,
+    video: AIVideo, 
   },
   editImage,
   number2Chinese,
