@@ -1,5 +1,7 @@
 import sharp from "sharp";
 
+const LOG = "[Storyboard-imageSplitting]";
+
 interface GridLayoutResult {
   cols: number;
   rows: number;
@@ -63,10 +65,15 @@ export default async (image: Buffer, length: number): Promise<Buffer[]> => {
     throw new Error("无法获取图片尺寸");
   }
 
-  const { cols, rows } = calculateGridLayout(length);
+  const layout = calculateGridLayout(length);
+  const { cols, rows } = layout;
 
   const cellWidth = Math.floor(totalWidth / cols);
   const cellHeight = Math.floor(totalHeight / rows);
+
+  console.log(
+    `${LOG} 请求 | imageSize=${image.length} bytes, length=${length}, layout=${cols}x${rows}, cellSize=${cellWidth}x${cellHeight}`,
+  );
 
   const buffers: Buffer[] = [];
 
@@ -89,6 +96,8 @@ export default async (image: Buffer, length: number): Promise<Buffer[]> => {
 
     buffers.push(cellBuffer);
   }
+
+  console.log(`${LOG} 响应 | cellsCount=${buffers.length}, sizes=[${buffers.map((b) => b.length).join(", ")}]`);
 
   return buffers;
 };

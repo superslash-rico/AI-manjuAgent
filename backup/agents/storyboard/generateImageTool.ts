@@ -3,6 +3,23 @@ import u from "@/utils";
 import sharp from "sharp";
 import { z } from "zod";
 
+const LOG = "[Storyboard-generateImage]";
+
+// 日志用：超 100 字符的 base64 不打印内容
+const sanitizeForLog = (obj: unknown): unknown => {
+  if (typeof obj === "string") {
+    const isBase64 = obj.includes("base64") || (/^[A-Za-z0-9+/=]+$/.test(obj) && obj.length > 50);
+    return isBase64 && obj.length > 100 ? `[base64, ${obj.length} chars]` : obj;
+  }
+  if (Array.isArray(obj)) return obj.map(sanitizeForLog);
+  if (obj && typeof obj === "object") {
+    const out: Record<string, unknown> = {};
+    for (const k of Object.keys(obj as object)) out[k] = sanitizeForLog((obj as Record<string, unknown>)[k]);
+    return out;
+  }
+  return obj;
+};
+
 interface AssetItem {
   name: string;
   description: string;
@@ -269,6 +286,9 @@ function buildResourcesMapPrompts(images: ImageInfo[]): string {
 }
 
 export default async (cells: { prompt: string }[], scriptId: number, projectId: number) => {
+  const cellPrompts = cells.map((c) => c.prompt);
+  console.log(`${LOG} 请求入参 | scriptId=${scriptId}, projectId=${projectId}, cellsCount=${cells.length}, prompts=${JSON.stringify(cellPrompts.map((p) => p.substring(0, 80) + (p.length > 80 ? "..." : "")))}`);
+
   const scriptData = await u.db("t_script").where({ id: scriptId, projectId }).first();
   const projectInfo = await u.db("t_project").where({ id: projectId }).first();
 
@@ -293,19 +313,31 @@ export default async (cells: { prompt: string }[], scriptId: number, projectId: 
     throw new Error("未找到可用的图片资源");
   }
 
-  const cellPrompts = cells.map((c) => c.prompt);
+  console.log(`${LOG} 资产过滤请求 | resourcesCount=${resources.length}, allImagesCount=${allImages.length}`);
 
   // 使用 AI 过滤相关资产
   const filteredImages = await filterRelevantAssets(cellPrompts, resources, allImages);
 
+  console.log(`${LOG} 资产过滤响应 | filteredCount=${filteredImages.length}, names=[${filteredImages.map((i) => i.name).join(", ")}]`);
+
   const resourcesMapPrompts = buildResourcesMapPrompts(filteredImages);
-  console.log("====润色前：", cellPrompts);
+
+  const promptsReq = {
+    prompts: cellPrompts,
+    style: `类型：${projectInfo?.type!}，风格：${projectInfo?.artStyle!}`,
+    aspectRatio: projectInfo?.videoRatio!,
+    assetsName: resources,
+  };
+  console.log(`${LOG} 润色请求 | ${JSON.stringify(sanitizeForLog(promptsReq))}`);
+
   const promptsData = await generateImagePromptsTool({
     prompts: cellPrompts,
     style: `类型：${projectInfo?.type!}，风格：${projectInfo?.artStyle!}`,
     aspectRatio: projectInfo?.videoRatio! as any,
     assetsName: resources,
   });
+
+  console.log(`${LOG} 润色响应 | gridLayout=${JSON.stringify(promptsData.gridLayout)}, promptLength=${promptsData.prompt?.length ?? 0}`);
 
   //   const prompts = `请生成${promptsData.gridLayout.totalCells}格,${promptsData.gridLayout.cols}列×${promptsData.gridLayout.rows}行宫格图。
 
@@ -314,9 +346,18 @@ export default async (cells: { prompt: string }[], scriptId: number, projectId: 
   // 注意：请严格按照提示词内容生成图片，确保人物样貌、艺术风格、色调光影一致。
   // `;
   const prompts = promptsData.prompt;
-  console.log("====润色后：", prompts);
 
   const processedImages = await processImages(filteredImages);
+
+  const imageReq = {
+    systemPrompt: resourcesMapPrompts,
+    prompt: prompts?.substring(0, 200) + (prompts && prompts.length > 200 ? "..." : ""),
+    size: "4K",
+    aspectRatio: projectInfo?.videoRatio ?? "16:9",
+    imageBase64Count: processedImages.length,
+    imageBase64Sizes: processedImages.map((b) => b.length),
+  };
+  console.log(`${LOG} 生图请求 | ${JSON.stringify(imageReq)}`);
 
   const contentStr = await u.ai.image({
     systemPrompt: resourcesMapPrompts,
@@ -329,6 +370,8 @@ export default async (cells: { prompt: string }[], scriptId: number, projectId: 
   const match = contentStr.match(/base64,([A-Za-z0-9+/=]+)/);
   const base64Str = match?.[1] ?? contentStr;
   const buffer = Buffer.from(base64Str, "base64");
+
+  console.log(`${LOG} 生图响应 | bufferSize=${buffer.length} bytes`);
 
   return buffer;
 };
