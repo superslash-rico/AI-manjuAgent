@@ -65,6 +65,9 @@ export default async function startServe() {
     }
   });
 
+  const { requestLogger } = await import("@/middleware/requestLogger");
+  app.use(requestLogger);
+
   const router = await import("@/router");
   await router.default(app);
 
