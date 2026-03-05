@@ -61,6 +61,10 @@ const mainBuildConfig: esbuild.BuildOptions = {
   try {
     console.log("🔨 开始构建...\n");
 
+    // 生成有效的 logo.ico（electron-builder 要求标准 ICO 格式）
+    const { execSync } = await import("child_process");
+    execSync("npx tsx scripts/generateIco.ts", { stdio: "inherit" });
+
     // 并行构建
     await Promise.all([esbuild.build(appBuildConfig), esbuild.build(mainBuildConfig)]);
 
