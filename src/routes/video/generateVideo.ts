@@ -128,7 +128,7 @@ export default router.post(
     res.status(200).send(success({ id: videoId, configId: configId || null }));
 
     // 异步生成视频
-    generateVideoAsync(videoId, projectId, fileUrl, savePath, prompt, duration, resolution, audioEnabled, aiConfigData);
+    generateVideoAsync(videoId, projectId, fileUrl, savePath, prompt, duration, resolution, mode, audioEnabled, aiConfigData);
   },
 );
 
@@ -141,6 +141,7 @@ async function generateVideoAsync(
   prompt: string,
   duration: number,
   resolution: string,
+  mode: string,
   audioEnabled: boolean,
   aiConfigData: t_config,
 ) {
@@ -183,6 +184,7 @@ ${prompt}
         duration: duration as any,
         aspectRatio: projectData?.videoRatio as any,
         resolution: resolution as any,
+        mode: mode as any,
         audio: audioEnabled,
       },
       {

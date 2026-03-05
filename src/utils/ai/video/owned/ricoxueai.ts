@@ -37,22 +37,33 @@ async function tryDoubaoVolcVideo(
     Authorization: `Bearer ${apiKey}`,
   };
 
-  // 图生视频：text 含 --ratio --dur，image_url 用 data:image/png;base64,xxx；文生视频仅 text
-  const hasImage = (input.imageBase64?.length ?? 0) > 0;
+  // 根据 mode：text 不传图；startEnd 首帧/尾帧 role；single reference_image
+  const mode = input.mode || "single";
+  const hasImage = (input.imageBase64?.length ?? 0) > 0 && mode !== "text";
   const ratio = hasImage ? "adaptive" : input.aspectRatio || "16:9";
   const textContent = `${input.prompt}  --ratio ${ratio}  --dur ${input.duration}`;
   const content: Array<{
     type: string;
     text?: string;
     image_url?: { url: string };
+    role?: string;
   }> = [{ type: "text", text: textContent }];
-  (input.imageBase64 || []).forEach((img) => {
-    const url =
-      img.startsWith("data:") || img.startsWith("http")
-        ? img
-        : `data:image/png;base64,${img}`;
-    content.push({ type: "image_url", image_url: { url } });
-  });
+  if (hasImage && input.imageBase64) {
+    input.imageBase64.forEach((img, idx) => {
+      const url =
+        img.startsWith("data:") || img.startsWith("http")
+          ? img
+          : `data:image/png;base64,${img}`;
+      const item: { type: string; image_url: { url: string }; role?: string } =
+        { type: "image_url", image_url: { url } };
+      if (mode === "startEnd") {
+        item.role = idx === 0 ? "first_frame" : "end_frame";
+      } else if (mode === "single") {
+        item.role = "reference_image";
+      }
+      content.push(item);
+    });
+  }
 
   const body = { model, content };
 
