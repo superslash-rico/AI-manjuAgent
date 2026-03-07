@@ -1,4 +1,4 @@
-// @db-hash d92d35781c6176cf42d0f0f793dff371
+// @db-hash a52a7546294a74505e3d8642a2868473
 //该文件由脚本自动生成，请勿手动修改
 
 export interface t_aiModelMap {
@@ -55,6 +55,14 @@ export interface t_image {
   'type'?: string | null;
   'videoId'?: number | null;
 }
+export interface t_login_session {
+  'createdAt'?: number | null;
+  'expiresAt'?: number | null;
+  'id'?: number;
+  'loginType'?: string | null;
+  'sessionId'?: string | null;
+  'userId'?: number | null;
+}
 export interface t_novel {
   'chapter'?: string | null;
   'chapterData'?: string | null;
@@ -97,6 +105,7 @@ export interface t_script {
   'projectId'?: number | null;
 }
 export interface t_setting {
+  'apiKey'?: string | null;
   'id'?: number;
   'imageModel'?: string | null;
   'languageModel'?: string | null;
@@ -165,6 +174,7 @@ export interface DB {
   "t_chatHistory": t_chatHistory;
   "t_config": t_config;
   "t_image": t_image;
+  "t_login_session": t_login_session;
   "t_novel": t_novel;
   "t_outline": t_outline;
   "t_project": t_project;

@@ -129,6 +129,7 @@ export default async (
         table.integer("id").notNullable();
         table.integer("userId");
         table.text("tokenKey");
+        table.text("apiKey");
         table.text("imageModel");
         table.text("languageModel");
         table.integer("projectId");
@@ -144,6 +145,17 @@ export default async (
           languageModel: "{}",
           projectId: null,
         });
+      },
+    },
+    {
+      name: "t_login_session",
+      builder: (table) => {
+        table.increments("id");
+        table.integer("userId");
+        table.text("sessionId").unique();
+        table.text("loginType");
+        table.integer("expiresAt");
+        table.integer("createdAt");
       },
     },
     {

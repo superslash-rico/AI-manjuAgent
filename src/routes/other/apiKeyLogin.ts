@@ -1,10 +1,13 @@
 import express from "express";
 import u from "@/utils";
 import jwt from "jsonwebtoken";
+import { v4 as uuid } from "uuid";
 import { success, error } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 import { z } from "zod";
 const router = express.Router();
+
+const SESSION_EXPIRE_MS = 180 * 24 * 60 * 60 * 1000;
 
 /**
  * 调用超级斜杠 /v1/models 接口验证 APIKey 有效性
@@ -124,16 +127,34 @@ export default router.post(
       });
     }
 
-    // 生成JWT Token
+    const sessionId = uuid();
+    const now = Date.now();
+
     const token = setToken(
       {
         id: user.id,
         name: user.name,
-        loginType: "apikey", // 标记登录类型
+        loginType: "apikey",
+        sessionId,
       },
       "180Days",
       finalTokenKey,
     );
+
+    await u.db("t_login_session").insert({
+      userId: user.id,
+      sessionId,
+      loginType: "apikey",
+      expiresAt: now + SESSION_EXPIRE_MS,
+      createdAt: now,
+    });
+
+    // 保存 APIKey 到 t_setting，供设置页自动填充
+    await u.db("t_setting").where("userId", user.id).update({ apiKey });
+    const settingRow = await u.db("t_setting").where("userId", user.id).first();
+    if (!settingRow) {
+      await u.db("t_setting").insert({ userId: user.id, tokenKey: finalTokenKey, apiKey });
+    }
 
     // 记录APIKey前缀用于日志（只保留前4位+后4位）
     const apiKeyPrefix = `${apiKey.slice(0, 4)}****${apiKey.slice(-4)}`;

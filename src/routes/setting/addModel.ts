@@ -17,6 +17,7 @@ export default router.post(
   }),
   async (req, res) => {
     const { type, model, baseUrl, apiKey, manufacturer, modelType } = req.body;
+    const userId = (req as any).user?.id ?? 1;
 
     await u.db("t_config").insert({
       type,
@@ -26,7 +27,7 @@ export default router.post(
       manufacturer,
       modelType,
       createTime: Date.now(),
-      userId: 1,
+      userId,
     });
     res.status(200).send(success("新增成功"));
   },

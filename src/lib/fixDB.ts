@@ -25,6 +25,7 @@ export default async (knex: Knex): Promise<void> => {
   };
 
   //添加字段
+  await addColumn("t_setting", "apiKey", "text");
   await addColumn("t_video", "time", "integer");
   await addColumn("t_video", "aiConfigId", "integer");
   await addColumn("t_config", "modelType", "text");
