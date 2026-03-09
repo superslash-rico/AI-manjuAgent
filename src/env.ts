@@ -3,8 +3,8 @@ import path from "path";
 
 // 默认环境变量（当 env 文件不存在时自动创建）
 const defaultEnvValues: Record<string, string> = {
-  dev: `NODE_ENV=dev\nPORT=60000\nOSSURL=http://127.0.0.1:60000/\nAI_API_BASE_URL=https://api.yiwuxueshe.cn\nRICOXUEAI_API_URL=https://api.yiwuxueshe.cn/v1/chat/completions\nRICOXUEAI_API_TIMEOUT=8000`,
-  prod: `NODE_ENV=prod\nPORT=60000\nOSSURL=http://127.0.0.1:60000/\nAI_API_BASE_URL=https://api.yiwuxueshe.cn\nRICOXUEAI_API_URL=https://api.yiwuxueshe.cn/v1/chat/completions\nRICOXUEAI_API_TIMEOUT=8000`,
+  dev: `NODE_ENV=dev\nPORT=60000\nOSSURL=http://127.0.0.1:60000/\nAI_API_BASE_URL=https://api.yiwuxueshe.cn\nRICOXUEAI_API_URL=https://api.yiwuxueshe.cn/v1/chat/completions\nRICOXUEAI_API_TIMEOUT=8000\nMINIO_ENDPOINT=42.193.124.39\nMINIO_PORT=9000\nMINIO_ACCESS_KEY=root\nMINIO_SECRET_KEY=123qwe!@#\nMINIO_BUCKET=manju\nMINIO_USE_SSL=false\nMINIO_PUBLIC_URL=http://42.193.124.39:9000`,
+  prod: `NODE_ENV=prod\nPORT=60000\nOSSURL=http://127.0.0.1:60000/\nAI_API_BASE_URL=https://api.yiwuxueshe.cn\nRICOXUEAI_API_URL=https://api.yiwuxueshe.cn/v1/chat/completions\nRICOXUEAI_API_TIMEOUT=8000\nMINIO_ENDPOINT=42.193.124.39\nMINIO_PORT=9000\nMINIO_ACCESS_KEY=root\nMINIO_SECRET_KEY=123qwe!@#\nMINIO_BUCKET=manju\nMINIO_USE_SSL=false\nMINIO_PUBLIC_URL=http://42.193.124.39:9000`,
 };
 
 // 判断是否为打包后的 Electron 环境

@@ -4,8 +4,16 @@ import path from "path";
 import OpenAI from "openai";
 import u from "@/utils";
 import { pollTask } from "@/utils/ai/utils";
+import { uploadBase64ToMinio } from "@/utils/minio";
 
 const LOG = "[ricoxueai-video]";
+
+/** 将图片解析为可用的 URL（MinIO 或原 base64） */
+async function resolveImageUrl(img: string): Promise<string> {
+  if (img.startsWith("http://") || img.startsWith("https://")) return img;
+  const minioUrl = await uploadBase64ToMinio(img);
+  return minioUrl ?? (img.startsWith("data:") ? img : `data:image/png;base64,${img}`);
+}
 
 // 查询 t_config 判断是否为内置默认视频模型
 const checkDoubaoVideoModel = async (
@@ -40,7 +48,7 @@ async function tryDoubaoVolcVideo(
   // 根据 mode：text 不传图；startEnd 首帧/尾帧 role；single reference_image
   const mode = input.mode || "single";
   const hasImage = (input.imageBase64?.length ?? 0) > 0 && mode !== "text";
-  const ratio = hasImage ? "adaptive" : input.aspectRatio || "16:9";
+  const ratio = input.aspectRatio || "16:9";
   const textContent = `${input.prompt}  --ratio ${ratio}`;
   const content: Array<{
     type: string;
@@ -49,11 +57,8 @@ async function tryDoubaoVolcVideo(
     role?: string;
   }> = [{ type: "text", text: textContent }];
   if (hasImage && input.imageBase64) {
-    input.imageBase64.forEach((img, idx) => {
-      const url =
-        img.startsWith("data:") || img.startsWith("http")
-          ? img
-          : `data:image/png;base64,${img}`;
+    const urls = await Promise.all(input.imageBase64.map(resolveImageUrl));
+    urls.forEach((url, idx) => {
       const item: { type: string; image_url: { url: string }; role?: string } =
         { type: "image_url", image_url: { url } };
       if (mode === "startEnd") {
@@ -67,13 +72,13 @@ async function tryDoubaoVolcVideo(
 
   const body = { model, content };
 
-  // 请求体日志（base64 截断避免刷屏）
+  // 请求体日志（仅 base64 截断，http URL 完整打印）
   const logBody = JSON.parse(JSON.stringify(body)) as typeof body;
   logBody.content?.forEach((item) => {
-    if (item.image_url?.url && item.image_url.url.length > 80) {
-      item.image_url.url =
-        item.image_url.url.slice(0, 80) +
-        `...[省略${item.image_url.url.length - 80}字符]`;
+    const url = item.image_url?.url;
+    if (url && url.startsWith("data:") && url.length > 80) {
+      item.image_url!.url =
+        url.slice(0, 80) + `...[省略${url.length - 80}字符]`;
     }
   });
   console.log(`${LOG} 豆包Volc请求地址:`, volcEndpoint);
@@ -239,7 +244,9 @@ async function tryUniversalVideoCreate(
   };
 
   if (input.aspectRatio) body.aspect_ratio = input.aspectRatio;
-  if (input.imageBase64?.length) body.images = input.imageBase64;
+  if (input.imageBase64?.length) {
+    body.images = await Promise.all(input.imageBase64.map(resolveImageUrl));
+  }
 
   const submitRes = await fetch(`${baseURL}/video/create`, {
     method: "POST",
@@ -320,7 +327,11 @@ export default async (
   if (!config.apiKey) throw new Error("缺少API Key");
 
   const apiKey = config.apiKey.replace("Bearer ", "");
-  const defaultBase = (process.env.AI_API_BASE_URL || "https://api.yiwuxueshe.cn").replace(/\/$/, "") + "/v1";
+  const defaultBase =
+    (process.env.AI_API_BASE_URL || "https://api.yiwuxueshe.cn").replace(
+      /\/$/,
+      "",
+    ) + "/v1";
   const baseURL = config.baseURL || defaultBase;
 
   console.log(
