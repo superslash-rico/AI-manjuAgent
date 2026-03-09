@@ -57,7 +57,12 @@ export default async function startServe() {
     if (!setting?.tokenKey) return res.status(500).send({ message: "服务器未配置，请联系管理员" });
 
     try {
-      const decoded = jwt.verify(token, setting.tokenKey as string);
+      const decoded = jwt.verify(token, setting.tokenKey as string) as { id?: number; sessionId?: string };
+      const sessionId = decoded?.sessionId;
+      if (!sessionId) return res.status(401).send({ message: "无效的token，请重新登录" });
+      const session = await u.db("t_login_session").where("sessionId", sessionId).first();
+      if (!session || (session.expiresAt && session.expiresAt < Date.now()))
+        return res.status(401).send({ message: "登录已过期，请重新登录" });
       (req as any).user = decoded;
       next();
     } catch (err) {
