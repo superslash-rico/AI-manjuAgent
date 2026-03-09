@@ -7,7 +7,8 @@ import { z } from "zod";
 const router = express.Router();
 
 /**
- * 调用超级斜杠 /v1/models 接口验证 APIKey 有效性
+ * 调用 AI API /v1/models 接口验证 APIKey 有效性
+ * baseURL 由环境变量 AI_API_BASE_URL 控制，默认 api.yiwuxueshe.cn（可换回 api.ricoxueai.cn）
  */
 async function validateApiKeyWithSuperSlash(apiKey: string): Promise<{ valid: boolean; message?: string }> {
   const keyPrefix = `${apiKey.slice(0, 4)}****${apiKey.slice(-4)}`;
@@ -17,8 +18,9 @@ async function validateApiKeyWithSuperSlash(apiKey: string): Promise<{ valid: bo
     return { valid: false, message: "APIKey格式错误，必须以'sk-'开头" };
   }
 
-  const baseURL = "https://api.ricoxueai.cn/v1";
-  const timeout = parseInt("8000");
+  const base = process.env.AI_API_BASE_URL || "https://api.yiwuxueshe.cn";
+  const baseURL = base.replace(/\/$/, "") + "/v1";
+  const timeout = parseInt(process.env.RICOXUEAI_API_TIMEOUT || "8000", 10);
   const url = `${baseURL}/models`;
 
   console.log("[apiKeyLogin] 开始鉴权, key:", keyPrefix, "url:", url);

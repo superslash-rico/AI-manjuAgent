@@ -46,7 +46,7 @@ export default async function startServe() {
     const rawToken = req.headers.authorization || (req.query.token as string) || "";
     const token = rawToken.replace("Bearer ", "");
     // 白名单路径
-    if (req.path === "/other/login" || req.path === "/other/apiKeyLogin") return next();
+    if (req.path === "/other/apiKeyLogin") return next();
 
     if (!token) return res.status(401).send({ message: "未提供token" });
 

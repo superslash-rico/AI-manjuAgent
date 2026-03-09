@@ -106,7 +106,8 @@ export default async (input: ImageConfig, config: AIConfig): Promise<string> => 
   if (!config.apiKey) throw new Error("缺少API Key");
 
   const apiKey = config.apiKey.replace("Bearer ", "");
-  const baseURL = config.baseURL || "https://api.ricoxueai.cn/v1";
+  const defaultBase = (process.env.AI_API_BASE_URL || "https://api.yiwuxueshe.cn").replace(/\/$/, "") + "/v1";
+  const baseURL = config.baseURL || defaultBase;
 
   const { isDefault, isImage } = await checkDoubaoImageModel(config.model!);
   if (isDefault) {

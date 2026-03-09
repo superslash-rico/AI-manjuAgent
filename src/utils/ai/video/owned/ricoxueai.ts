@@ -41,7 +41,7 @@ async function tryDoubaoVolcVideo(
   const mode = input.mode || "single";
   const hasImage = (input.imageBase64?.length ?? 0) > 0 && mode !== "text";
   const ratio = hasImage ? "adaptive" : input.aspectRatio || "16:9";
-  const textContent = `${input.prompt}  --ratio ${ratio}  --dur ${input.duration}`;
+  const textContent = `${input.prompt}  --ratio ${ratio}`;
   const content: Array<{
     type: string;
     text?: string;
@@ -320,7 +320,8 @@ export default async (
   if (!config.apiKey) throw new Error("缺少API Key");
 
   const apiKey = config.apiKey.replace("Bearer ", "");
-  const baseURL = config.baseURL || "https://api.ricoxueai.cn/v1";
+  const defaultBase = (process.env.AI_API_BASE_URL || "https://api.yiwuxueshe.cn").replace(/\/$/, "") + "/v1";
+  const baseURL = config.baseURL || defaultBase;
 
   console.log(
     `${LOG} 提交任务:`,

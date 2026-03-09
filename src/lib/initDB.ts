@@ -212,6 +212,7 @@ export default async (
         table.unique(["id"]);
       },
       initData: async (knex) => {
+        const defaultBaseUrl = (process.env.AI_API_BASE_URL || "https://api.yiwuxueshe.cn").replace(/\/$/, "") + "/v1";
         await knex("t_config").insert([
           {
             id: 1,
@@ -219,7 +220,7 @@ export default async (
             model: "doubao-seed-1-8-251228",
             modelType: "文本",
             apiKey: "",
-            baseUrl: "https://api.ricoxueai.cn/v1",
+            baseUrl: defaultBaseUrl,
             manufacturer: "ricoxueai",
             source: "default",
             createTime: Date.now(),
@@ -231,7 +232,7 @@ export default async (
             model: "doubao-seedream-5-0-260128",
             modelType: "图像",
             apiKey: "",
-            baseUrl: "https://api.ricoxueai.cn/v1",
+            baseUrl: defaultBaseUrl,
             manufacturer: "ricoxueai",
             source: "default",
             createTime: Date.now(),
@@ -243,7 +244,7 @@ export default async (
             model: "doubao-seededit-3-0-i2i-250628",
             modelType: "图像",
             apiKey: "",
-            baseUrl: "https://api.ricoxueai.cn/v1",
+            baseUrl: defaultBaseUrl,
             manufacturer: "ricoxueai",
             source: "default",
             createTime: Date.now(),
@@ -255,7 +256,7 @@ export default async (
             model: "doubao-seedance-1-5-pro-251215",
             modelType: "音视频",
             apiKey: "",
-            baseUrl: "https://api.ricoxueai.cn/v1",
+            baseUrl: defaultBaseUrl,
             manufacturer: "ricoxueai",
             source: "default",
             createTime: Date.now(),
